@@ -22,6 +22,7 @@ function listTodo(): array {
  * @return mixed
  */
 function createTodo (mixed $todoData): mixed {
+    echo 123;
 }
 
 /**
