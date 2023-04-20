@@ -24,6 +24,20 @@ function listTodo(): array {
  * @return mixed
  */
 function createTodo (mixed $todoData): mixed {
+    global $blank_todo;
+
+    $todoes = read_data();
+
+    $newTodo = array_merge($blank_todo, $todoData);
+    $newTodo['id'] = uniqid();
+
+    $todoes[] = $newTodo;
+
+    write_data($todoes);
+
+    return $newTodo;
+
+
 }
 
 /**
