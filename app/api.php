@@ -68,6 +68,14 @@ function editTodo($todoId, $todoData) {
  * @return void
  */
 function readTodo($todoId) {
+    $todoes = listTodo();
+
+    $key = array_search($todoId, array_column($todoes, 'id'));
+
+    if(array_key_exists($key, $todoes)){
+        return $todoes[$key];
+    }
+    return false;
 
 }
 
