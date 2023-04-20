@@ -48,7 +48,18 @@ function createTodo (mixed $todoData): mixed {
  * @return mixed
  */
 function editTodo($todoId, $todoData) {
+    $todoes = listTodo();
+
+    $key = array_search($todoId, array_column($todoes, 'id'));
+    $newTodo = array_merge($todoes[$key], $todoData);
+
+    $todoes[$key] = $newTodo;
+
+    write_data($todoes);
+
+    return $newTodo;
 }
+
 
 /**
  * Read item by id
