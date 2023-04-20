@@ -13,7 +13,9 @@ $blank_todo = [
  * @return array
  */
 function listTodo(): array {
+    return read_data();
 }
+
 
 /**
  * Create and return item
