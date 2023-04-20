@@ -87,4 +87,17 @@ function readTodo($todoId) {
  * @return bool
  */
 function deleteTodo($todoId) {
+    $todoes = listTodo();
+    $key = array_search ($todoId, array_column($todoes, 'id'));
+
+    if($key != false){
+        unset($todoes[$key]);
+
+        write_data($todoes);
+
+        return true;
+
+    }
+
+    return false;
 }
