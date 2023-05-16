@@ -6,6 +6,8 @@ use App\HttpRequest;
 use App\JsonResponse;
 use App\Models\Todo;
 use App\Repositories\TodoRepository;
+use  App\Exceptions\NotFound;
+use App\Exceptions\RouteNotDefined;
 
 class TodoController
 {
@@ -31,6 +33,10 @@ class TodoController
      */
     function createTodo (HttpRequest $request): void
     {
+        if ($request->get_method() !== 'POST') {
+            JsonResponse::routeNotDefined();
+            return;
+        }
         JsonResponse::created($this->repository->add($request->get_body())->toArray());
     }
 
@@ -41,6 +47,10 @@ class TodoController
      */
     function editTodo(HttpRequest $request): void
     {
+        if ($request->get_method() !== 'PUT' ) {
+            JsonResponse::notFound();
+            return;
+        }
         JsonResponse::ok($this->repository->update(intval($request->get_params()['id']), $request->get_body())->toArray());
     }
 

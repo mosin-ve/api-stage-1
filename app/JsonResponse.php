@@ -35,4 +35,13 @@ class JsonResponse
     {
         (new self(201))->respond($data);
     }
+    static function notFound(): void
+    {
+        (new self(404))->respond(['error' => 'not found']);
+    }
+
+    public static function routeNotDefined(): void
+    {
+        (new self(405))->respond(['error' => 'route not defined']);
+    }
 }

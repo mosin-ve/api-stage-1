@@ -14,6 +14,7 @@ class Api
     private array $routes = [];
 
     /**
+     *
      * @param string $base_path
      */
     public function __construct(string $base_path)
@@ -45,7 +46,7 @@ class Api
                 return $callback($request);
             }
         }
-
+        return JsonResponse::routeNotDefined();
     }
 
 }
