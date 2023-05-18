@@ -35,4 +35,9 @@ class JsonResponse
     {
         (new self(201))->respond($data);
     }
+
+    static function notFound(): void
+    {
+        (new self(404))->respond();
+    }
 }

@@ -7,12 +7,12 @@ interface TodoInterface
     /**
      * @return float
      */
-    public function get_id(): float;
+    public function get_id(): string;
 
     /**
      * @param float $id
      */
-    public function set_id(float $id): void;
+    public function set_id(string $id): void;
 
     /**
      * @return string
