@@ -6,22 +6,30 @@ use App\HttpRequest;
 use App\JsonResponse;
 use App\Models\Todo;
 use App\Repositories\TodoRepository;
+use App\Middlewares\MethodNotAllowedMiddleware;
+use Psy\Util\Json;
 
 class TodoController
 {
     private TodoRepository $repository;
+    private MethodNotAllowedMiddleware $middleware;
+
     public function __construct(TodoRepository $repository)
     {
         $this->repository = $repository;
     }
 
+    public function setMiddleware(MethodNotAllowedMiddleware $middleware): void
+    {
+        $this->middleware = $middleware;
+    }
 
     /**
      * Read list of items
      */
     public function listTodo(): void
     {
-        JsonResponse::ok(array_map(fn (Todo $item) => $item->toArray(), $this->repository->get_all()) );
+        JsonResponse::ok(array_map(fn($item) => $item, $this->repository->get_all()));
     }
 
     /**
@@ -29,9 +37,14 @@ class TodoController
      *
      * @param $todoData mixed
      */
-    function createTodo (HttpRequest $request): void
+    function createTodo(HttpRequest $request): void
     {
-        JsonResponse::created($this->repository->add($request->get_body())->toArray());
+        if($this->middleware->checkIfMethodAllowed($request)) {
+            JsonResponse::methodNotAllowed();
+        } else {
+            JsonResponse::created((array)$this->repository->add($request->get_body()));
+        }
+
     }
 
     /**
@@ -41,7 +54,13 @@ class TodoController
      */
     function editTodo(HttpRequest $request): void
     {
-        JsonResponse::ok($this->repository->update(intval($request->get_params()['id']), $request->get_body())->toArray());
+        if($this->middleware->checkIfMethodAllowed($request)) {
+            JsonResponse::methodNotAllowed();
+        } elseif ($this->repository->update(intval($request->get_params()['id']), $request->get_body()) == false) {
+            JsonResponse::notFound();
+        } else {
+            JsonResponse::ok((array)$this->repository->update(intval($request->get_params()['id']), $request->get_body()));
+        }
     }
 
     /**
@@ -51,7 +70,12 @@ class TodoController
      */
     function readTodo(HttpRequest $request): void
     {
-        JsonResponse::ok($this->repository->get_by_id($request->get_params()['id'])->toArray());
+        if ($this->repository->get_by_id($request->get_params()['id']) == false) {
+            JsonResponse::notFound();
+        } else {
+            JsonResponse::ok((array)$this->repository->get_by_id($request->get_params()['id']));
+        }
+
     }
 
     /**
@@ -61,9 +85,12 @@ class TodoController
      */
     function deleteTodo(HttpRequest $request): void
     {
-        if ($this->repository->delete($request->get_params()['id'])) {
+        if($this->middleware->checkIfMethodAllowed($request)) {
+            JsonResponse::methodNotAllowed();
+        } elseif ($this->repository->delete($request->get_params()['id']) == false) {
+            JsonResponse::notFound();
+        } else {
             JsonResponse::noContent();
         }
     }
-
 }

@@ -11,11 +11,11 @@ interface TodoRepositoryInterface
      */
     public function get_all(): array;
 
-    public function get_by_id(int $id): Todo;
+    public function get_by_id($id): Todo|bool;
 
-    public function add(mixed $data): Todo;
+    public function add(mixed $data);
 
-    public function update(int $id, mixed $data): Todo;
+    public function update(string $id, mixed $data): Todo|bool;
 
-    public function delete($id);
+    public function delete($id): bool;
 }
