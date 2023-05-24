@@ -40,4 +40,9 @@ class JsonResponse
     {
         (new self(404))->respond();
     }
+
+    static function methodNotAllowed(): void
+    {
+        (new self(405))->respond();
+    }
 }

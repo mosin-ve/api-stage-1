@@ -21,6 +21,10 @@ class Api
         $this->base_path = $base_path;
     }
 
+    public function getRoutes() {
+        return $this->routes;
+    }
+
     public function add_route (HttpMethods $method, string $uri, callable $callback): void
     {
         $route = new Route($callback, $uri);
