@@ -11,6 +11,7 @@ class HttpRequest
 
     private string $uri;
 
+
     /**
      * @param HttpMethods $method
      * @param array $params
@@ -22,6 +23,7 @@ class HttpRequest
         $this->uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         parse_str(file_get_contents("php://input"),$put_body);
         $this->body =  $put_body ?: $_POST;
+        $this->host = 'http://'.$_SERVER['HTTP_HOST'].'/';
     }
 
     /**

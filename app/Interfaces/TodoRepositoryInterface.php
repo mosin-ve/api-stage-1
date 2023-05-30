@@ -15,7 +15,7 @@ interface TodoRepositoryInterface
 
     public function add(mixed $data): Todo;
 
-    public function update(int $id, mixed $data): Todo;
+    public function update(int $id, mixed $data): Todo|bool;
 
     public function delete($id);
 }
